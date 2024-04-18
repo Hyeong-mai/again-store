@@ -2,7 +2,7 @@ import FormButton from "@/Components/form-btn";
 import FormInput from "@/Components/form-input";
 import SocialLogin from "@/Components/social-login";
 
-export default function CreateAccount() {
+export default function SMSLogin() {
   return (
     <div className="flex flex-col gap-10 py-6">
       <div className="flex flex-col gap-2 *:font-medium">
@@ -24,7 +24,7 @@ export default function CreateAccount() {
           required
           errors={[]}
         />
-        <FormButton loading={false} text="Verify" />
+        <FormButton text="Verify" />
       </form>
       <SocialLogin />
     </div>
