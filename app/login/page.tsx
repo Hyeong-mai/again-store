@@ -2,12 +2,12 @@
 
 import SocialLogin from "@/Components/social-login";
 import { useFormState } from "react-dom";
-import { handleForm } from "./action";
+import { logIn } from "./action";
 import Input from "@/Components/input";
 import Button from "@/Components/button";
 
 export default function Login() {
-  const [state, action] = useFormState(handleForm, null);
+  const [state, action] = useFormState(logIn, null);
   return (
     <div className="flex flex-col gap-10 py-6">
       <div className="flex flex-col gap-2 *:font-medium">
