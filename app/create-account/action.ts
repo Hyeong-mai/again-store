@@ -3,6 +3,9 @@
 import bcrypt from "bcrypt";
 import db from "@/lib/db";
 import { z } from "zod";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const passwordRegex = new RegExp(
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*?[#?!@$%^&*-]).+$/
@@ -97,16 +100,25 @@ export default async function createAccount(
   if (!result.success) {
     return result.error.flatten();
   } else {
-    const hashPassword = await bcrypt.hash(result.data.password, 12);
+    //const hashPassword = await bcrypt.hash(result.data.password, 12);
     const user = await db.user.create({
       data: {
         username: result.data.username,
         email: result.data.email,
-        password: hashPassword,
+        password: result.data.password,
       },
       select: {
         id: true,
       },
     });
+    const cookie = await getIronSession(cookies(), {
+      cookieName: "delicious-karrot",
+      password: process.env.COOKIE_PASSWORD!,
+    });
+
+    //@ts-ignore
+    cookie.id = user.id;
+    await cookie.save();
+    redirect("/profile");
   }
 }
