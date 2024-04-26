@@ -106,8 +106,8 @@ export default async function createAccount(
       },
     });
     const session = await getSession();
-    session.id = user.id;
-    session.save();
+    session.id = user!.id;
+    await session.save();
     redirect("/profile");
   }
 }
