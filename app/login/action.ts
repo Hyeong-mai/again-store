@@ -10,6 +10,8 @@ import {
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
 } from "@/lib/constants";
+import { cookies } from "next/headers";
+import { getIronSession } from "iron-session";
 
 const checkEmailExists = async (email: string) => {
   const user = await db.user.findUnique({
@@ -29,12 +31,11 @@ const formSchema = z.object({
     .email()
     .toLowerCase()
     .refine(checkEmailExists, "An account with this email does no exists"),
-  password: z
-    .string({
-      required_error: "Password is required",
-    })
-    .min(PASSWORD_MIN_LENGTH)
-    .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+  password: z.string({
+    required_error: "Password is required",
+  }),
+  // .min(PASSWORD_MIN_LENGTH)
+  // .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
 });
 
 export async function logIn(prevState: any, formData: FormData) {
@@ -55,19 +56,16 @@ export async function logIn(prevState: any, formData: FormData) {
         password: true,
       },
     });
-    // const ok = await bcrypt.compare(
-    //   result.data.password,
-    //   user!.password ?? "xxx"
-    // );
-    const ok = result.data.password === user!.password;
+    const ok = await bcrypt.compare(
+      result.data.password,
+      user!.password ?? "xxxx"
+    );
 
     if (ok) {
       const session = await getSession();
       session.id = user!.id;
-      await session.save();
       redirect("/profile");
     } else {
-      console.log("ASd");
       return {
         fieldErrors: {
           password: ["Wrong password."],

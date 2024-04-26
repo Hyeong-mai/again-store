@@ -11,10 +11,6 @@ import {
   PASSWORD_REGEX_ERROR,
 } from "@/lib/constants";
 
-const passwordRegex = new RegExp(
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*?[#?!@$%^&*-]).+$/
-);
-
 const checkPassword = ({
   password,
   confirmPassword,
@@ -35,11 +31,11 @@ const formSchema = z
       .trim()
       .toLowerCase(),
     email: z.string().email().toLowerCase(),
-    password: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH)
-      .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
-    confirmPassword: z.string().min(PASSWORD_MIN_LENGTH),
+    password: z.string(),
+    // .min(PASSWORD_MIN_LENGTH)
+    // .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+    confirmPassword: z.string(),
+    // .min(PASSWORD_MIN_LENGTH)
   })
   .superRefine(async ({ username }, ctx) => {
     const user = await db.user.findUnique({
@@ -98,12 +94,12 @@ export default async function createAccount(
   if (!result.success) {
     return result.error.flatten();
   } else {
-    //const hashPassword = await bcrypt.hash(result.data.password, 12);
+    const hashPassword = await bcrypt.hash(result.data.password, 12);
     const user = await db.user.create({
       data: {
         username: result.data.username,
         email: result.data.email,
-        password: result.data.password,
+        password: hashPassword,
       },
       select: {
         id: true,
@@ -111,6 +107,7 @@ export default async function createAccount(
     });
     const session = await getSession();
     session.id = user.id;
+    session.save();
     redirect("/profile");
   }
 }
