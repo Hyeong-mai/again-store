@@ -1,6 +1,6 @@
 import db from "@/lib/db";
-import getSession from "@/lib/session";
-import { notFound, redirect } from "next/navigation";
+import getSession from "@/lib/auth/session/getSession";
+import { redirect } from "next/navigation";
 
 const getUser = async () => {
   const session = await getSession();

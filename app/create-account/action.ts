@@ -4,12 +4,13 @@ import bcrypt from "bcrypt";
 import db from "@/lib/db";
 import { z } from "zod";
 import { redirect } from "next/navigation";
-import getSession from "@/lib/session";
+import getSession from "@/lib/auth/session/getSession";
 import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
 } from "@/lib/constants";
+import { SaveSession } from "@/lib/auth/session/updateSession";
 
 const checkPassword = ({
   password,
@@ -105,9 +106,7 @@ export default async function createAccount(
         id: true,
       },
     });
-    const session = await getSession();
-    session.id = user!.id;
-    await session.save();
+    await SaveSession(user!.id);
     redirect("/profile");
   }
 }
