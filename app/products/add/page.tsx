@@ -38,7 +38,6 @@ export default function AddProduct() {
       method: "post",
       body: cloudflareForm,
     });
-    console.log(await response.text());
     if (response.status !== 200) {
       return;
     }
