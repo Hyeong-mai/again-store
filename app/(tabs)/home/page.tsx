@@ -23,9 +23,9 @@ async function getInitialProducts() {
   return products;
 }
 
-// export type InitialProducts = Prisma.PromiseReturnType<
-//   typeof getInitialProducts
-// >;
+export type InitialProducts = Prisma.PromiseReturnType<
+  typeof getInitialProducts
+>;
 
 export const metadata = {
   title: "Home",
