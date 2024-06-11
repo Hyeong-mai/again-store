@@ -6,7 +6,15 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  theme: {},
+  theme: {
+    boxShadow: {
+      inner: "inset 0px -1px 0px 0px rgba(0,0,0,0.3);",
+    },
+    borderColor: {
+      none: "rgba(0,0,0,0)",
+    },
+  },
   plugins: [require("@tailwindcss/forms")],
 };
+
 export default config;

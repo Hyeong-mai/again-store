@@ -1,13 +1,13 @@
+import { ArrowUturnUpIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-between min-h-screen p-6">
-      <div className="my-auto flex flex-col items-center gap-2 *:font-medium">
-        <span className="text-9xl">🥕</span>
-        <h1 className="text-4xl">당근</h1>
-        <h2 className="text-2xl">당근 마켓에 어서오세요!</h2>
+      <div className="my-auto flex flex-col items-center gap-5 *:font-medium">
+        <h1 className="text-4xl text-green-500">다시</h1>
+        <h2 className="text-2xl">다시 마켓에 어서오세요!</h2>
       </div>
       <div className="flex flex-col items-center gap-3 w-full">
         <Link href={`/create-account`} className="primary-btn py-2.5 text-lg">

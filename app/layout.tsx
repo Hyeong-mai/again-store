@@ -6,8 +6,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Karrot Market",
-    default: "Karrot Market",
+    template: "%s | Again Store",
+    default: "Again Store",
   },
   description: "Sell and buy all the things!",
 };
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` bg-neutral-900 text-white max-w-screen-sm mx-auto`}>
+      <body className={` bg-white text-green max-w-screen-sm mx-auto`}>
         {children}
       </body>
     </html>

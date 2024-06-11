@@ -45,7 +45,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
     };
   });
   return (
-    <div className="p-5 flex flex-col gap-5">
+    <div className="p-5 flex flex-col grid grid-cols-2 gap-5">
       {products.map((product) => (
         <ListProduct key={product.id} {...product} />
       ))}

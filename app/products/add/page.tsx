@@ -51,7 +51,7 @@ export default function AddProduct() {
       <form action={action} className="p-5 flex flex-col gap-5">
         <label
           htmlFor="photo"
-          className="border-2 aspect-square flex items-center justify-center flex-col text-neutral-300 border-neutral-300 rounded-md border-dashed cursor-pointer bg-center bg-cover"
+          className="border-2 aspect-square flex items-center justify-center flex-col text-green-300 border-neutral-300 rounded-md border-dashed cursor-pointer bg-center bg-cover"
           style={{ backgroundImage: `url(${preview})` }}
         >
           {preview === "" ? (
