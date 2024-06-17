@@ -31,11 +31,25 @@ CREATE TABLE "Product" (
     "price" DOUBLE PRECISION NOT NULL,
     "photo" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "sell" BOOLEAN NOT NULL DEFAULT false,
     "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) NOT NULL,
+    "endBidDate" TIMESTAMP(3) NOT NULL,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "BidRecord" (
+    "id" SERIAL NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "create_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "update_at" TIMESTAMP(3) NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "productId" INTEGER NOT NULL,
+
+    CONSTRAINT "BidRecord_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -68,9 +82,9 @@ CREATE TABLE "Like" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "userId" INTEGER NOT NULL,
-    "postId" INTEGER NOT NULL,
+    "productId" INTEGER NOT NULL,
 
-    CONSTRAINT "Like_pkey" PRIMARY KEY ("userId","postId")
+    CONSTRAINT "Like_pkey" PRIMARY KEY ("userId","productId")
 );
 
 -- CreateTable
@@ -90,21 +104,20 @@ CREATE TABLE "Message" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "chatRoomId" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
+    "isRead" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "LiveStream" (
+CREATE TABLE "SoldOut" (
     "id" SERIAL NOT NULL,
-    "title" TEXT NOT NULL,
-    "stream_key" TEXT NOT NULL,
-    "stream_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "userId" INTEGER NOT NULL,
+    "productId" INTEGER NOT NULL,
 
-    CONSTRAINT "LiveStream_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SoldOut_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -141,6 +154,12 @@ ALTER TABLE "SMSToken" ADD CONSTRAINT "SMSToken_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "Product" ADD CONSTRAINT "Product_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "BidRecord" ADD CONSTRAINT "BidRecord_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BidRecord" ADD CONSTRAINT "BidRecord_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -153,7 +172,7 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId"
 ALTER TABLE "Like" ADD CONSTRAINT "Like_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Like" ADD CONSTRAINT "Like_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Like" ADD CONSTRAINT "Like_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_chatRoomId_fkey" FOREIGN KEY ("chatRoomId") REFERENCES "ChatRoom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -162,7 +181,10 @@ ALTER TABLE "Message" ADD CONSTRAINT "Message_chatRoomId_fkey" FOREIGN KEY ("cha
 ALTER TABLE "Message" ADD CONSTRAINT "Message_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "LiveStream" ADD CONSTRAINT "LiveStream_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SoldOut" ADD CONSTRAINT "SoldOut_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SoldOut" ADD CONSTRAINT "SoldOut_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ChatRoomToUser" ADD CONSTRAINT "_ChatRoomToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "ChatRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
