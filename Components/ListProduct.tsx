@@ -1,7 +1,6 @@
 import { formatToTimeAgo, formatToWon } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import LikeButton from "./like-button";
 import Timer from "./timer";
 
 interface ListProductProps {
