@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
-import { getLastBidRecord } from "../getLastBidRecord/route";
+import { getLastBidRecord } from "@/lib/getLastBidRecord";
 
 export async function POST(request: NextRequest) {
   const { productId } = await request.json();
