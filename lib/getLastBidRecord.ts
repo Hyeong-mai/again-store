@@ -1,4 +1,3 @@
-// lib/getLastBidRecord.ts
 import db from "@/lib/db";
 
 export async function getLastBidRecord(productId: number) {
