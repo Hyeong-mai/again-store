@@ -1,6 +1,8 @@
 import { formatToTimeAgo, formatToWon } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import LikeButton from "./like-button";
+import Timer from "./timer";
 
 interface ListProductProps {
   title: string;
@@ -9,19 +11,21 @@ interface ListProductProps {
   description: string;
   photo: string;
   id: number;
+  endBidDate: Date;
 }
 
 export default function ListProduct({
   title,
   price,
   create_at,
+  endBidDate,
   description,
   photo,
   id,
 }: ListProductProps) {
   return (
     <Link
-      href={`/products/${id}`}
+      href={`/sellplus/${id}`}
       className="flex flex-col items-center justify-center  bg-white gap-5"
     >
       <div className="relative w-full h-64 bg-black rounded-2xl overflow-hidden ">
@@ -39,6 +43,9 @@ export default function ListProduct({
           {description}
         </span>
         <span className="text-lg font-semibold">{formatToWon(price)}원</span>
+        <div className="flex items-center ">
+          <Timer productId={id} endBidDate={endBidDate.toISOString()} />
+        </div>
       </div>
     </Link>
   );

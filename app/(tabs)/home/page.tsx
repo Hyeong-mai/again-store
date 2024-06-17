@@ -8,13 +8,18 @@ import Link from "next/link";
 const getCacheProducts = nextCache(getInitialProducts, ["home-products"]);
 async function getInitialProducts() {
   const products = await db.product.findMany({
+    where: {
+      sell: false,
+    },
     select: {
       title: true,
       price: true,
       create_at: true,
       description: true,
+      endBidDate: true,
       photo: true,
       id: true,
+      sell: true,
     },
     take: 25,
     orderBy: {
@@ -37,7 +42,7 @@ export const metadata = {
 export default async function Home() {
   const initialProducts = await getInitialProducts();
   return (
-    <div>
+    <div className="pt-14">
       <ProductList initialProducts={initialProducts}></ProductList>
       <Link
         href="/products/add"

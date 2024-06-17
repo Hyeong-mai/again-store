@@ -8,7 +8,9 @@ const config: Config = {
   ],
   theme: {
     boxShadow: {
-      inner: "inset 0px -1px 0px 0px rgba(0,0,0,0.3);",
+      inner_b: "inset 0px -1px 0px 0px rgb(209 213 219);",
+      inner_t: "inset 0px 1px 0px 0px rgb(209 213 219);",
+      inner_a: "inset 1px 0px 1px 1px rgb(209 213 219);",
     },
     borderColor: {
       none: "rgba(0,0,0,0)",

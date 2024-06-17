@@ -19,6 +19,7 @@ interface ChatMessageListProps {
   username: string;
   avatar: string;
 }
+
 export default function ChatMessagesList({
   initialMessages,
   userId,
@@ -29,44 +30,40 @@ export default function ChatMessagesList({
   const [messages, setMessages] = useState(initialMessages);
   const [message, setMessage] = useState("");
   const channel = useRef<RealtimeChannel>();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { value },
-    } = event;
+    const { value } = event.target;
     setMessage(value);
   };
+
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setMessages((prevMsgs) => [
-      ...prevMsgs,
-      {
-        id: Date.now(),
-        payload: message,
-        created_at: new Date(),
-        userId,
-        user: {
-          username: "string",
-          avatar: "xxx",
-        },
+    const newMessage = {
+      id: Date.now(),
+      payload: message,
+      created_at: new Date(),
+      userId,
+      user: {
+        username,
+        avatar,
       },
-    ]);
+    };
+    setMessages((prevMsgs) => [...prevMsgs, newMessage]);
     channel.current?.send({
       type: "broadcast",
       event: "message",
-      payload: {
-        id: Date.now(),
-        payload: message,
-        created_at: new Date(),
-        userId,
-        user: {
-          username,
-          avatar,
-        },
-      },
+      payload: newMessage,
     });
     await saveMessage(message, chatRoomId);
     setMessage("");
+    scrollToBottom();
   };
+
   useEffect(() => {
     const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
     channel.current = client.channel(`room-${chatRoomId}`);
@@ -75,12 +72,18 @@ export default function ChatMessagesList({
         setMessages((prevMsgs) => [...prevMsgs, payload.payload]);
       })
       .subscribe();
+    scrollToBottom();
     return () => {
       channel.current?.unsubscribe();
     };
   }, [chatRoomId]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
-    <div className="p-5 flex flex-col gap-5 min-h-screen justify-end">
+    <div className="p-5 flex flex-col gap-1 min-h-screen justify-end">
       {messages.map((message) => (
         <div
           key={message.id}
@@ -97,7 +100,7 @@ export default function ChatMessagesList({
               className="size-8 rounded-full"
             />
           ) : (
-            <UserIcon className="size-8 rounded-full" />
+            <UserIcon className="size-10 text-gray-300 border rounded-full" />
           )}
           <div
             className={`flex flex-col gap-1 ${
@@ -106,29 +109,35 @@ export default function ChatMessagesList({
           >
             <span
               className={`${
-                message.userId === userId ? "bg-neutral-500" : "bg-orange-500"
-              } p-2.5 rounded-md`}
+                message.userId === userId
+                  ? "bg-green-400 text-white"
+                  : "bg-gray-200"
+              } px-5 py-2.5 rounded-2xl`}
             >
               {message.payload}
             </span>
             <span className="text-xs">
-              {formatToTimeAgo(message.created_at.toString())}
+              {/* {formatToTimeAgo(message.created_at.toString())} */}
             </span>
           </div>
         </div>
       ))}
-      <form className="flex relative" onSubmit={onSubmit}>
+      <div ref={messagesEndRef} />
+      <form
+        className="flex gap-4 items-center justify-between fixed bottom-0 p-10 bg-white w-full mx-auto max-w-screen-sm"
+        onSubmit={onSubmit}
+      >
         <input
           required
           onChange={onChange}
           value={message}
-          className="bg-transparent rounded-full w-full h-10 focus:outline-none px-5 ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-neutral-50 border-none placeholder:text-neutral-400"
+          className="bg-transparent text-lg rounded-full w-full h-14 focus:outline-none px-7 ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-neutral-50 border-none placeholder:text-neutral-400"
           type="text"
           name="message"
           placeholder="Write a message..."
         />
-        <button className="absolute right-0">
-          <ArrowUpCircleIcon className="size-10 text-orange-500 transition-colors hover:text-orange-300" />
+        <button className="w-1/12">
+          <ArrowUpCircleIcon className="size-14 text-black transition-colors  hover:text-green-400" />
         </button>
       </form>
     </div>

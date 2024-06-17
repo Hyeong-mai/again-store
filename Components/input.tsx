@@ -13,7 +13,7 @@ export default function Input({
   return (
     <div>
       <input
-        className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-green-500 border-none placeholder:text-neutral-400"
+        className="bg-transparent text-black rounded-md w-full  h-14 focus:outline-none ring-2 focus:ring-4 transition ring-neutral-200 focus:ring-green-500 border-none placeholder:text-neutral-400"
         name={name}
         {...rest}
       />

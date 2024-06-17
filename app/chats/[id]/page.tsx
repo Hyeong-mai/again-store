@@ -1,4 +1,5 @@
 import ChatMessagesList from "@/Components/chat-messages-list";
+import ChatHeader from "@/Components/chatHeader";
 import getSession from "@/lib/auth/session/getSession";
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
@@ -11,7 +12,7 @@ async function getRoom(id: string) {
     },
     include: {
       users: {
-        select: { id: true },
+        select: { id: true, username: true, avatar: true },
       },
     },
   });
@@ -73,15 +74,27 @@ export default async function ChatRoom({ params }: { params: { id: string } }) {
   if (!user) {
     return notFound();
   }
+  const otherUser = room.users.find((u) => u.id !== session.id);
   return (
-    <div className="relative">
-      <ChatMessagesList
-        chatRoomId={params.id}
-        userId={session.id!}
-        username={user.username}
-        avatar={user.avatar!}
-        initialMessages={initialMessages}
-      />
-    </div>
+    <>
+      {otherUser && (
+        <ChatHeader
+          user={{
+            id: otherUser.id,
+            username: otherUser.username,
+            avatar: otherUser.avatar ?? "",
+          }}
+        />
+      )}
+      <div className="relative">
+        <ChatMessagesList
+          chatRoomId={params.id}
+          userId={session.id!}
+          username={user.username}
+          avatar={user.avatar!}
+          initialMessages={initialMessages}
+        />
+      </div>
+    </>
   );
 }

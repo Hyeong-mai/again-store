@@ -48,7 +48,7 @@ export default function AddProduct() {
   const [state, action] = useFormState(interceptAction, null);
   return (
     <div>
-      <form action={action} className="p-5 flex flex-col gap-5">
+      <form action={action} className="py-5 flex flex-col gap-5">
         <label
           htmlFor="photo"
           className="border-2 aspect-square flex items-center justify-center flex-col text-green-300 border-neutral-300 rounded-md border-dashed cursor-pointer bg-center bg-cover"
@@ -87,13 +87,24 @@ export default function AddProduct() {
           errors={state?.fieldErrors.price}
         />
         <Input
+          name="daysToAdd"
+          type="number"
+          required
+          placeholder="일찰 기간"
+          errors={state?.fieldErrors.daysToAdd}
+        />
+        <Input
           name="description"
           type="text"
           required
           placeholder="자세한 설명"
           errors={state?.fieldErrors.description}
         />
-        <Button text="작성 완료" />
+        <div className="fixed bottom-0 bg-white w-full mx-auto max-w-screen-sm  shadow-inner_t  p-5 *:text-green">
+          <button className="w-full bg-black text-lg p-3 rounded-lg text-white">
+            작성완료
+          </button>
+        </div>
       </form>
     </div>
   );

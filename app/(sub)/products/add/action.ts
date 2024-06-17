@@ -18,12 +18,16 @@ const productSchema = z.object({
   price: z.coerce.number({
     required_error: "Price is required",
   }),
+  daysToAdd: z.coerce.number({
+    required_error: "Days to add is required",
+  }),
 });
 export async function uploadProduct(_: any, formData: FormData) {
   const data = {
     photo: formData.get("photo"),
     title: formData.get("title"),
     price: formData.get("price"),
+    daysToAdd: Number(formData.get("daysToAdd")),
     description: formData.get("description"),
   };
   const result = productSchema.safeParse(data);
@@ -31,6 +35,9 @@ export async function uploadProduct(_: any, formData: FormData) {
     return result.error.flatten();
   } else {
     const session = await getSession();
+    const endBidDate = new Date();
+    endBidDate.setDate(endBidDate.getDate() + result.data.daysToAdd);
+
     if (session.id) {
       const product = await db.product.create({
         data: {
@@ -38,6 +45,7 @@ export async function uploadProduct(_: any, formData: FormData) {
           description: result.data.description,
           price: result.data.price,
           photo: result.data.photo,
+          endBidDate: endBidDate,
           user: {
             connect: {
               id: session.id,
@@ -48,7 +56,7 @@ export async function uploadProduct(_: any, formData: FormData) {
           id: true,
         },
       });
-      redirect(`/products/${product.id}`);
+      redirect(`/sellplus/${product.id}`);
     }
   }
 }
