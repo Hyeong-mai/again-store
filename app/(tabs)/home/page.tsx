@@ -40,7 +40,7 @@ export const metadata = {
 // export const revalidate = 60;
 
 export default async function Home() {
-  const initialProducts = await getInitialProducts();
+  const initialProducts = await getCacheProducts();
   return (
     <div className="pt-14">
       <ProductList initialProducts={initialProducts}></ProductList>
