@@ -13,7 +13,6 @@ interface ChatHeaderProps {
 
 export default function ChatHeader({ user }: ChatHeaderProps) {
   const router = useRouter();
-  console.log(user);
   return (
     <div className="fixed top-0 w-full flex items-center justify-between z-20 mx-auto max-w-screen-sm bg-white   p-5  shadow-inner_b">
       <button onClick={() => router.push("/home")}>

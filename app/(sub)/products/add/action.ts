@@ -4,6 +4,7 @@ import { z } from "zod";
 import getSession from "@/lib/auth/session/getSession";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
+import { revalidateTag } from "next/cache";
 
 const productSchema = z.object({
   photo: z.string({
@@ -56,6 +57,7 @@ export async function uploadProduct(_: any, formData: FormData) {
           id: true,
         },
       });
+      await revalidateTag("home-products");
       redirect(`/sellplus/${product.id}`);
     }
   }
