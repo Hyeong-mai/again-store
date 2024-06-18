@@ -17,7 +17,7 @@ export default function TabBar() {
   const pathname = usePathname();
   return (
     <div className="fixed bottom-0 bg-white w-full mx-auto max-w-screen-sm  shadow-inner_t   *:text-green">
-      <div className="h-full gird grid-cols-3 grid-flow-row  items-center justify-between text-xl">
+      <div className="h-full grid grid-cols-3 grid-flow-row  items-center gap-10 justify-center text-xl">
         <Link href="/home">
           {pathname === "/home" ? (
             <div className="flex text-center p-5  gap-3 item-center justify-center font-bold  border-t-4 border-black  p-2">
